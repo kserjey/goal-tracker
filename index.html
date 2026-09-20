@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f0f0f0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#18171a" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Цели">
+<meta name="description" content="Трекер целей и привычек">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<title>Трекер целей</title>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="top">
+    <button class="nav" id="prev">‹</button>
+    <div class="title"><div id="ttl"></div><div id="sub"></div></div>
+    <button class="nav" id="next">›</button>
+  </div>
+
+  <main id="main">
+    <section id="weekView">
+      <div class="board" id="board"></div>
+      <form class="add" id="addForm" autocomplete="off">
+        <input id="newGoal" placeholder="Новая активность" enterkeyhint="done" maxlength="60">
+        <button type="submit" aria-label="Добавить">+</button>
+      </form>
+      <p class="hint">Свайп по сетке переключает недели. Тап по названию цели открывает её статистику и удаление.</p>
+    </section>
+    <section id="statsView" hidden></section>
+    <section id="setView" hidden></section>
+  </main>
+</div>
+
+<nav class="tabs" aria-label="Разделы">
+  <button data-tab="week" aria-pressed="true">Неделя</button>
+  <button data-tab="stats" aria-pressed="false">Статистика</button>
+  <button data-tab="set" aria-pressed="false">Настройки</button>
+</nav>
+
+<div class="scrim" id="scrim" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="shTitle">
+    <h2 id="shTitle" class="vh"></h2>
+    <div id="shCard"></div>
+    <button class="btn danger" id="shDel">Удалить цель</button>
+    <button class="btn" id="shClose">Закрыть</button>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<input type="file" id="fileIn" class="fin" accept="application/json,.json" tabindex="-1" aria-hidden="true">
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>
