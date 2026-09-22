@@ -75,6 +75,43 @@ time. Two consequences, both deliberate:
 2. Importing the same file on two devices produces identical data, so merging
    them afterwards is a no-op.
 
+## Converting a month calendar page
+
+`tools/import-from-html.mjs` turns a saved page of the external tracker (the
+`table.cal` grid) into the external file above:
+
+```
+node tools/import-from-html.mjs Aug-2026.html -o goals.json
+node tools/import-from-html.mjs *.html -o goals.json   # several months at once
+```
+
+It reads the month from `<span id="month" data-n data-y>`, one goal per row
+(`div.task` → `data-tag`, text → name), and one mark per `data-on="1"` cell
+(`data-j` → day). Several pages merge by `data-tag`, which is stable across
+months, so the goal's whole history lands under one id — and because that id
+becomes the goal id, re-importing the same file is a no-op. Counts and any
+skipped cells go to stderr; only the JSON goes to stdout.
+
+### Landing on goals you already have
+
+Goals merge by **id, never by name** (`mergeGoals` in `src/backup/merge.ts`), so
+a converted row arrives as a *new* goal even when a goal of that name is already
+in the app — you would get two «Спорт и здоровье» side by side. To land the
+marks on the existing goal, give the tool a backup to match against:
+
+```
+node tools/import-from-html.mjs Aug-2026.html --against goal-tracker-2026-09-23.json -o goals.json
+```
+
+A row takes the existing goal's id when the names are **equal** after trimming,
+collapsing repeated spaces and folding case — nothing fuzzier, because
+«Чтение» must not capture «Развитие через чтение» and a wrong match welds two
+histories together irreversibly. Rows that do not match keep their `data-tag`
+and arrive as new goals. Every row is reported (`=` matched, `+` new) so the
+mapping can be checked before importing. Two cases are deliberately left
+unmatched: a name carried by two live goals (ambiguous), and a deleted goal
+(reusing its id would undelete it).
+
 ## Merge vs Replace
 
 | | Merge (default) | Replace |

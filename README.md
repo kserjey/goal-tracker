@@ -84,6 +84,15 @@ A lenient adapter also accepts common field-name variations. Add a
 source-specific adapter in `src/import/adapters/` if needed — the preview and
 merge path is shared.
 
+To convert a saved month page of the external calendar tracker into that file:
+
+```
+node tools/import-from-html.mjs Aug-2026.html -o goals.json
+```
+
+Goals merge by id, not by name, so pass `--against <backup.json>` to land the
+marks on goals you already have instead of creating namesakes.
+
 ## Layout
 
 ```
@@ -96,5 +105,5 @@ src/
   backup/     export, import, merge
   import/     canonical format + source adapters
   dev/        demo data generator
-tools/        icon generator (node tools/make-icons.mjs)
+tools/        icon generator, HTML calendar -> import JSON
 ```
