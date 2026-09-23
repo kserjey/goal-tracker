@@ -74,6 +74,8 @@ function header(): void {
   if (tab === 'set') {
     $('#ttl').textContent = 'Настройки';
     sub.innerHTML = '<span>Данные и резервные копии</span>';
+    navPrev().style.visibility = 'hidden';
+    navNext().style.visibility = 'hidden';
     navPrev().disabled = true;
     navNext().disabled = true;
     return;
@@ -89,6 +91,8 @@ function header(): void {
     const isCur = tk >= key(start) && tk <= key(last);
     sub.innerHTML = `<span>${last.getFullYear()}</span>` +
       (isCur ? '<span>Текущая неделя</span>' : '<button class="back" id="goToday">К сегодня</button>');
+    navPrev().style.visibility = '';
+    navNext().style.visibility = '';
     navPrev().disabled = false;
     navNext().disabled = false;
     navPrev().ariaLabel = 'Предыдущая неделя';
@@ -101,6 +105,8 @@ function header(): void {
     sub.innerHTML = sel.k === cur
       ? '<span>Текущий месяц</span>'
       : '<button class="back" id="goToday">К текущему месяцу</button>';
+    navPrev().style.visibility = '';
+    navNext().style.visibility = '';
     navNext().disabled = sel.k >= cur;
     navPrev().disabled = prev.k < earliestMonth();
     navPrev().ariaLabel = 'Предыдущий месяц';
